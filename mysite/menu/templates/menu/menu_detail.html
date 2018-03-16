@@ -6,9 +6,9 @@
     </head>
     <body>
         <div class="page-header">
-            {% if user.is_authenticated %}
-                <a href="{% url 'menu_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-            {% endif %}
+            
+                <a href="{% url 'mysite:menu_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+            
             <h1><a href="/">Soda Fountain</a></h1>
         </div>
         <div class="content container">
@@ -16,15 +16,15 @@
                 <div class="col-md-8">
                     <div class="post">
                         <h1>
-                            {% if user.is_authenticated %}
-                                <a class="btn btn-default" href="{% url 'menu_edit' pk=menu.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-                            {% endif %}
+                            
+                                <a class="btn btn-default" href="{% url 'mysite:menu_edit' pk=menu.pk %}">Edit menu<span class="glyphicon glyphicon-pencil"></span></a>
+                            
                             {{ menu.season }}
                         </h1>
                         <h2>On the menu this season:</h2>
                         <ul>
                             {% for item in menu.items.all %}
-                                <li><a href="{% url 'item_detail' pk=item.pk %}">{{ item }}</a></li>
+                                <li><a href="{% url 'mysite:item_detail' pk=item.pk %}">{{ item }}</a></li>
                             {% endfor %}
                         </ul>
                         {% if menu.expiration_date %}

@@ -6,16 +6,17 @@
     </head>
     <body>
         <div class="page-header">
-            {% if user.is_authenticated %}
-                <a href="{% url 'menu_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-            {% endif %}
+            
+                <a href="{% url 'mysite:menu_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+            
             <h1><a href="/">Soda Fountain</a></h1>
         </div>
         <div class="content container">
             <div class="row">
                 <div class="col-md-8">
                     <h1>Change menu</h1>
-                    <form method="POST" class="menu-form">{% csrf_token %}
+                    <form method="POST" class="menu-form">
+                        {% csrf_token %}
                         {{ form.as_p }}
                         <button type="submit" class="save btn btn-default">Save</button>
                     </form>
