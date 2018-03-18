@@ -26,38 +26,36 @@ def create_new_menu(request):
         form = MenuForm(request.POST)
         if form.is_valid():
             menu = form.save()
-            #**************I may have messed up the 'pk=form.pk'
-            return redirect('menu/menu_detail.html', {'menu': menu})
-    else:
-        form = MenuForm()
+            return redirect('mysite:menu_detail', pk=menu.pk)
+    
+    form = MenuForm()
     return render(request, 'menu/new_menu.html', {'form': form})
 
 def edit_menu(request, pk):
     menu = get_object_or_404(Menu, pk=pk)
-    items = Item.objects.all()
     if request.method == "POST":
-        menu.season = request.POST.get('season', '')
-        #*********possibly change this 'expiration_date' part. 
-        menu.expiration_date = datetime.strptime(request.POST.get('expiration_date', ''), '%m/%d/%Y')
-        menu.items = request.POST.get('items', '')
-        menu.save()
-        return redirect('menu/menu_detail.html', {'menu': menu})
-
-    return render(request, 'menu/edit_menu.html', {
-        'menu': menu,
-        'items': items,
-        })
+        form = MenuForm(instance=menu, data=request.POST)
+        if form.is_valid:
+            form.save()
+            
+            return redirect('mysite:menu_detail', pk=pk)
+    form = MenuForm(instance=menu)
+    return render(request, 'menu/edit_menu.html', {'form': form})
 
 def edit_item(request, pk):
     item = get_object_or_404(Item, pk=pk)
-    form = ItemForm(instance=item)
     if request.method == "POST":
         form = ItemForm(instance=item, data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('menu/detail_item.html', {'item': item})
+            return redirect('mysite:item_detail', pk=pk)
+    form = ItemForm(instance=item)
     return render(request, 'menu/item_edit.html', {'form': form})
 
+
+
+#return render goes straight to an html page.
+#return redirect goes straight the the urls page. 
 
  
 
