@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from . import views
 
+app_name = 'mysite'
+
 urlpatterns = [
     url(r'^$', views.menu_list, name='menu_list'),
     url(r'^menu/(?P<pk>\d+)/edit/$', views.edit_menu, name='menu_edit'),
