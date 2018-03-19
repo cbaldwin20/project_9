@@ -1,11 +1,12 @@
 from django import forms
-#from django.forms.extras.widgets import SelectDateWidget
+from django.forms.extras.widgets import SelectDateWidget
 
 from .models import Menu, Item, Ingredient
 
 class MenuForm(forms.ModelForm):
     expiration_date = forms.DateField(widget=forms.SelectDateWidget())
-    
+    items = forms.ModelMultipleChoiceField(queryset=Item.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
+
     class Meta:
         model = Menu
         exclude = ('created_date',) 

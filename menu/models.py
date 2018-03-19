@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 
+
 class Menu(models.Model):
     season = models.CharField(max_length=20)
     items = models.ManyToManyField('Item', related_name='items')
