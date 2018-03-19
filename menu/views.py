@@ -10,7 +10,7 @@ from .forms import MenuForm, ItemForm
 def menu_list(request):
     current_time = timezone.now()
     #*********change 'lte' to 'gte'
-    menus = Menu.objects.filter(expiration_date__lte=current_time).order_by('expiration_date')
+    menus = Menu.objects.filter(expiration_date__gte=current_time).order_by('expiration_date')
     return render(request, 'menu/list_all_current_menus.html', {'menus': menus})
 
 def menu_detail(request, pk):
