@@ -70,11 +70,15 @@ class MyTests(TestCase):
 
 
     def test_create_new_menu_view(self):
-        self.client.post('/menu/new', data={
-            'expiration_date': timezone.now() + timezone.timedelta(days=2),
-                        'season': 'Spring 2018',
-                        'created_date': timezone.now(),
-                        'items': ['1']
-            })
-        self.assertEqual(Menu.objects.count(), 2)
-        
+        resp = self.client.get(reverse('mysite:menu_new'))
+        self.assertEqual(resp.status_code, 200)
+        form = MenuForm() 
+        self.assertEqual(form, resp.context['form'])
+        self.assertTemplateUsed(resp, 'menu/new_menu.html')
+        self.assertContains(resp, "Create new menu")
+
+
+
+
+
+
