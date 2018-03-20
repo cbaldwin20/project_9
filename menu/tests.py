@@ -3,8 +3,9 @@ from django.test import TestCase
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+
 from menu.models import Menu, Item, Ingredient 
-from menu.forms import MenuForm 
+from menu.forms import MenuForm, ItemForm 
 
 user = User.objects.get(id=1)
 class MyTests(TestCase):
@@ -105,6 +106,17 @@ class MyTests(TestCase):
         self.assertContains(resp, "Change item")
 
     def test_edit_item_view_post(self):
+        
+        form = ItemForm({
+            'name': 'Ketchup',
+            'description': 'Heinz brand',
+            'chef': user.pk,
+            'ingredients': ['1']
+        })
+        ingredient = Ingredient.objects.get(pk=1)
+        self.assertTrue(ingredient)
+
+        
         self.client.post(reverse('mysite:item_edit', args=[self.item.id]), {
             'name': 'Ketchup',
             'description': 'Heinz brand',
@@ -113,8 +125,3 @@ class MyTests(TestCase):
         })
         item1 = Item.objects.get(id=1)
         self.assertEqual(item1.name, 'Ketchup')
-        
-
-
-
-
