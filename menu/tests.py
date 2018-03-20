@@ -58,26 +58,62 @@ class MyTests(TestCase):
         self.assertContains(resp, self.item.name)
 
 
-    def test_menuform_valid(self):
-        form = MenuForm(data={
-                        'expiration_date': timezone.now() + timezone.timedelta(days=2),
-                        'season': 'Spring 2018',
-                        'created_date': timezone.now(),
-                        'items': ['1']
-                             })
-        self.assertTrue(form.is_valid())
+    
 
 
 
-    def test_create_new_menu_view(self):
+    def test_create_new_menu_view_get(self):
         resp = self.client.get(reverse('mysite:menu_new'))
         self.assertEqual(resp.status_code, 200)
-        form = MenuForm() 
-        self.assertEqual(form, resp.context['form'])
         self.assertTemplateUsed(resp, 'menu/new_menu.html')
         self.assertContains(resp, "Create new menu")
 
+    def test_create_new_menu_view_post(self):
+        expiration_date = timezone.now() + timezone.timedelta(days=2)
 
+        self.client.post('/menu/new/', data={
+            'expiration_date': expiration_date.strftime("%Y-%m-%d"),
+            'season': 'Spring 2018',
+            'created_date': timezone.now().strftime("%Y-%m-%d"),
+            'items': ['1']
+        })
+
+        self.assertEqual(Menu.objects.count(), 2)
+
+    def test_edit_menu_view_get(self):
+        resp = self.client.get(reverse('mysite:menu_edit', kwargs={'pk':self.menu.id}))
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'menu/edit_menu.html')
+        self.assertContains(resp, "Change menu")
+
+    def test_edit_menu_view_post(self):
+        expiration_date = timezone.now() + timezone.timedelta(days=3)
+
+        self.client.post(reverse('mysite:menu_edit', args=[self.menu.id]), {
+            'expiration_date': expiration_date.strftime("%Y-%m-%d"),
+            'season': 'Spring 2019',
+            'created_date': timezone.now().strftime("%Y-%m-%d"),
+            'items': ['1']
+        })
+        menu = Menu.objects.get(id=1)
+        self.assertEqual(menu.season, 'Spring 2019')
+
+    def test_edit_item_view_get(self):
+        resp = self.client.get(reverse('mysite:item_edit', kwargs={'pk':self.item.id}))
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'menu/item_edit.html')
+        self.assertContains(resp, "Change item")
+
+    def test_edit_item_view_post(self):
+        self.client.post(reverse('mysite:item_edit', args=[self.item.id]), {
+            'name': 'Ketchup',
+            'description': 'Heinz brand',
+            'chef': user,
+            'ingredients': ['1']
+        })
+        item1 = Item.objects.get(id=1)
+        self.assertEqual(item1.name, 'Ketchup')
+        
 
 
 
