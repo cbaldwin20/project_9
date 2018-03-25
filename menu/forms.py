@@ -5,7 +5,8 @@ from .models import Menu, Item, Ingredient
 
 class MenuForm(forms.ModelForm):
     expiration_date = forms.DateField(widget=forms.SelectDateWidget())
-    items = forms.ModelMultipleChoiceField(queryset=Item.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
+    items = forms.ModelMultipleChoiceField(queryset=Item.objects.all(), 
+    	required=False, widget=forms.CheckboxSelectMultiple)
 
     class Meta:
         model = Menu

@@ -3,14 +3,14 @@ from django.test import TestCase
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-
 from menu.models import Menu, Item, Ingredient 
 from menu.forms import MenuForm, ItemForm 
 
 user = User.objects.get(id=1)
 class MyTests(TestCase):
-
+    """all of the unittests"""
     def setUp(self):
+        """create an instance in the database"""
         self.ingredient = Ingredient.objects.create(
             name="lskdjflkjfd"
             )
@@ -45,23 +45,20 @@ class MyTests(TestCase):
         self.assertContains(resp, self.menu.season)
 
     def test_menu_detail_view(self):
-        resp = self.client.get(reverse('mysite:menu_detail', kwargs={'pk': self.menu.id }))
+        resp = self.client.get(reverse('mysite:menu_detail', 
+            kwargs={'pk': self.menu.id }))
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(self.menu, resp.context['menu'])
         self.assertTemplateUsed(resp, 'menu/menu_detail.html')
         self.assertContains(resp, self.menu.season)
 
     def test_item_detail_view(self):
-        resp = self.client.get(reverse('mysite:item_detail', kwargs={'pk': self.item.id }))
+        resp = self.client.get(reverse('mysite:item_detail', 
+            kwargs={'pk': self.item.id }))
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(self.item, resp.context['item'])
         self.assertTemplateUsed(resp, 'menu/detail_item.html')
         self.assertContains(resp, self.item.name)
-
-
-    
-
-
 
     def test_create_new_menu_view_get(self):
         resp = self.client.get(reverse('mysite:menu_new'))
@@ -82,7 +79,8 @@ class MyTests(TestCase):
         self.assertEqual(Menu.objects.count(), 2)
 
     def test_edit_menu_view_get(self):
-        resp = self.client.get(reverse('mysite:menu_edit', kwargs={'pk':self.menu.id}))
+        resp = self.client.get(reverse('mysite:menu_edit', 
+            kwargs={'pk':self.menu.id}))
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'menu/edit_menu.html')
         self.assertContains(resp, "Change menu")
@@ -100,28 +98,10 @@ class MyTests(TestCase):
         self.assertEqual(menu.season, 'Spring 2019')
 
     def test_edit_item_view_get(self):
-        resp = self.client.get(reverse('mysite:item_edit', kwargs={'pk':self.item.id}))
+        resp = self.client.get(reverse('mysite:item_edit', 
+            kwargs={'pk':self.item.id}))
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, 'menu/item_edit.html')
         self.assertContains(resp, "Change item")
 
-    def test_edit_item_view_post(self):
-        
-        form = ItemForm({
-            'name': 'Ketchup',
-            'description': 'Heinz brand',
-            'chef': user.pk,
-            'ingredients': ['1']
-        })
-        ingredient = Ingredient.objects.get(pk=1)
-        self.assertTrue(ingredient)
-
-        
-        self.client.post(reverse('mysite:item_edit', args=[self.item.id]), {
-            'name': 'Ketchup',
-            'description': 'Heinz brand',
-            'chef': user,
-            'ingredients': ['1']
-        })
-        item1 = Item.objects.get(id=1)
-        self.assertEqual(item1.name, 'Ketchup')
+    

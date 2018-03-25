@@ -6,14 +6,18 @@
         <div class="col-md-8">
             <div class="post">
                 
-                	<a class="btn btn-default" href="{% url 'mysite:item_edit' pk=item.pk %}">Edit item<span class="glyphicon glyphicon-pencil"></span></a>
+                	<a class="btn btn-default" 
+                    href="{% url 'mysite:item_edit' pk=item.pk %}">
+                    Edit item<span class="glyphicon glyphicon-pencil"></span>
+                    </a>
                 
                 
                
                 <h1>{{ item.name }}</h1>
                 <p><strong>Head Chef:</strong> {{ item.chef }}</p>
                 <p>{{ item.description }}</p>
-                <p><strong>Ingredients: </strong>{{ item.ingredients.all|join:", " }}</p>
+                <p><strong>Ingredients: 
+                </strong>{{ item.ingredients.all|join:", " }}</p>
                 {% if item.standard %}
                     <p><em>This item is available year-round.</em></p>
                 {% endif %}
