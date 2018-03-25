@@ -1,5 +1,5 @@
 coverage==3.7.1
 Django==1.9.9
 django-debug-toolbar==1.5
-selenium==2.53.1
+selenium==3.11.0
 sqlparse==0.2.1
